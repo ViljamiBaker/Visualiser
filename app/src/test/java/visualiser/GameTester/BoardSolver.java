@@ -6,11 +6,15 @@ import visualiser.Renderer.Renderer;
 import visualiser.Renderer.Objects.Function;
 import visualiser.Renderer.Objects.ShadowData;
 import visualiser.Renderer.Physical.PhysicalOrganiser;
+import visualiser.Renderer.Util.RendererStartData;
 
 
 public class BoardSolver {
 
 public static PhysicalOrganiser<Board> solveBoard(Board board){
+    return BoardSolver.solveBoard(board, Integer.MAX_VALUE);
+}
+public static PhysicalOrganiser<Board> solveBoard(Board board, int maxTurn){
         PhysicalOrganiser<Board> o = new PhysicalOrganiser<>();
         ArrayList<Board> openBoards = new ArrayList<>();
         
@@ -20,13 +24,19 @@ public static PhysicalOrganiser<Board> solveBoard(Board board){
         int lastSize = 0;
         while (openBoards.size()>0) {
             Board b = openBoards.get(0);
+            if(b.turn()>board.turn()+maxTurn){
+                openBoards.remove(0);
+                doneBoards.add(b);
+                o.add(b);
+                continue;
+            }
             for (Board b2 : b.getPossibleMoves()) {
                 if(openBoards.contains(b2)||doneBoards.contains(b2)){
-                    o.addConnection(b, b2, false);
+                    o.addConnection(b, b2, b.isBothWay());
                     continue;
                 }
                 openBoards.add(b2);
-                o.addConnection(b, b2, false);
+                o.addConnection(b, b2, b.isBothWay());
                 o.add(b2);
             }
             openBoards.remove(0);
@@ -42,9 +52,12 @@ public static PhysicalOrganiser<Board> solveBoard(Board board){
         System.out.println(o.nodes.length);
         return o;
     }
-    public static void startVisualisation(Board b){
-        PhysicalOrganiser<Board> o = solveBoard(b);
+    public static void startVisualisation(Board b, RendererStartData dat){
+        BoardSolver.startVisualisation(b, dat, Integer.MAX_VALUE);
+    }
+    public static void startVisualisation(Board b, RendererStartData dat, int maxTurn){
+        PhysicalOrganiser<Board> o = solveBoard(b,maxTurn);
         System.out.println(o.nodes.length);
-        Renderer.start(o, new Function[0], 100, -2, new ShadowData(0.1,5,0.3));
+        Renderer.start(o, dat);
     }
 }

@@ -7,6 +7,6 @@ public interface Board extends RenderData{
     public Board clone();
     public boolean end();
     public int turn();
+    public boolean isBothWay();
     public String toString();
-    public boolean equals(Object o);
 }

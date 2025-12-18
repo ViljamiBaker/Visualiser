@@ -8,6 +8,7 @@ import visualiser.Renderer.Renderer;
 import visualiser.Renderer.Objects.Function;
 import visualiser.Renderer.Objects.RenderData;
 import visualiser.Renderer.Objects.ShadowData;
+import visualiser.Renderer.Util.RendererUpdateType;
 import visualiser.Data.Organiser;
 import visualiser.ParkingPanic.Board.Car;
 import visualiser.ParkingPanic.Board.Car.Dir;
@@ -365,6 +366,6 @@ public class ParkingPanic {
 
         Organiser<Board> o = solveBoard(ogBoard);
         System.out.println(o.nodes.length);
-        Renderer.start(o, new Function[0], 100, -2, new ShadowData(0.1,5,0.3));
+        Renderer.start(o, new Function[0], 100, RendererUpdateType.UpdateToTime, new ShadowData(0.1,5,0.3));
     }
 }

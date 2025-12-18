@@ -22,7 +22,7 @@ public class PhysicalOrganiser<T> extends Organiser<T>{
         }
         for (BaseConnection baseConnection : cln.connections) {
             Connection<T> conn = ((Connection<T>)baseConnection);
-            addConnInt(new Connection<>(findNode(conn.node1.data), findNode(conn.node2.data),conn.bothway));
+            addConnInt(new Connection<>(findAndAddNode(conn.node1.data), findAndAddNode(conn.node2.data),conn.bothway));
         }
     }
 
@@ -31,7 +31,7 @@ public class PhysicalOrganiser<T> extends Organiser<T>{
     }
 
     public PhysicalNode<T> findP(T dat){
-        return (PhysicalNode<T>)super.findNode(dat);
+        return (PhysicalNode<T>)super.findAndAddNode(dat);
     }
 
     public int getNodeCount(){
@@ -40,7 +40,7 @@ public class PhysicalOrganiser<T> extends Organiser<T>{
 
     @Override
     public Node<T> add(T dat){
-        PhysicalNode<T> n = (PhysicalNode<T>)findNodeInt(dat);
+        PhysicalNode<T> n = (PhysicalNode<T>)findNode(dat);
         if(n!=null) return n;
         n = new PhysicalNode<T>(dat);
         //resetNodePosition(n,10,0.1f);
@@ -49,7 +49,7 @@ public class PhysicalOrganiser<T> extends Organiser<T>{
     };
 
     public void resetNodePosition(T dat, int settleCount,float deltaTime){
-        resetNodePosition((PhysicalNode<T>)findNode(dat), settleCount, deltaTime);
+        resetNodePosition((PhysicalNode<T>)findAndAddNode(dat), settleCount, deltaTime);
     }
 
     @SuppressWarnings("unchecked")

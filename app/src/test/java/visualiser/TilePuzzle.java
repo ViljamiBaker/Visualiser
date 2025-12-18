@@ -1,13 +1,25 @@
 package visualiser;
 
+import static org.lwjgl.glfw.GLFW.GLFW_KEY_I;
+
+import java.util.Scanner;
+
 import org.joml.Vector3f;
 
+import visualiser.Data.BaseNode;
 import visualiser.GameTester.Board;
 import visualiser.GameTester.BoardSolver;
+import visualiser.Renderer.Renderer;
+import visualiser.Renderer.Objects.Function;
+import visualiser.Renderer.Objects.ShadowData;
+import visualiser.Renderer.Physical.PhysicalNode;
+import visualiser.Renderer.Util.RendererStartData;
+import visualiser.Renderer.Util.RendererUpdateType;
 
 public class TilePuzzle {
     public static class TileBoard implements Board{
 
+        public static final String DEFAULT = "0123456789";
         private static final int[][] WINARR = new int[][]{{1,2,3},{4,0,5},{6,7,8}};
 
         public int turn;
@@ -120,14 +132,30 @@ public class TilePuzzle {
             return tiles[y][x];
         }
 
+        public boolean isBothWay(){
+            return true;
+        }
+
         public String toString(){
             String str = "";
             for (int y = 0; y < tiles.length; y++) {
                 for (int x = 0; x < tiles.length; x++) {
-                    str += tilestring.charAt(getTile(x, y));
+                    str += TileBoard.DEFAULT.charAt(getTile(x, y));
                     if(x!=tiles[0].length-1){
                         str += ", ";
                     }
+                }
+                if(y!=tiles.length-1){
+                    str += "\n";
+                }
+            }
+            str += "\n";
+            for (int y = 0; y < tiles.length; y++) {
+                for (int x = 0; x < tiles.length; x++) {
+                    str += tilestring.charAt(getTile(x, y));
+                    //if(x!=tiles[0].length-1){
+                    //    str += ", ";
+                    //}
                 }
                 if(y!=tiles.length-1){
                     str += "\n";
@@ -163,6 +191,34 @@ public class TilePuzzle {
     }
 
     public static void main(String[] args){
-        BoardSolver.startVisualisation(new TileBoard("012345678"));
+        BoardSolver.startVisualisation(new TileBoard(" ┌─┐││└─┘"), new RendererStartData(new Function[] {
+            ()->{
+                if(Renderer.isKeyPressed(GLFW_KEY_I)){
+                    try (Scanner sc = new Scanner(System.in)) {
+                        int a = sc.nextInt();
+                        int b = sc.nextInt();
+                        int c = sc.nextInt();
+                        int d = sc.nextInt();
+                        int e = sc.nextInt();
+                        int f = sc.nextInt();
+                        int g = sc.nextInt();
+                        int h = sc.nextInt();
+                        int i = sc.nextInt();
+                        int[][] boardtofind = new int[][]{
+                            {a,b,c},
+                            {d,e,f},
+                            {g,h,i},
+                        };
+                        TileBoard boardToFind = new TileBoard(" ┌─┐││└─┘");
+                        boardToFind.tiles = boardtofind;
+                        BaseNode p = Renderer.o.findNode(boardToFind);
+                        System.out.println(p);
+                        BaseNode p2 = Renderer.o.findNode(new TileBoard(" ┌─┐││└─┘"));
+                        if(p!=null) Renderer.selectedNode1 = p;
+                        if(p2!=null) Renderer.selectedNode2 = p;
+                    } catch (Exception e) {}
+                }
+            }
+        }, 100, RendererUpdateType.UpdateToTime, new ShadowData(0.1,5,0.3)) ,25);
     }
 }

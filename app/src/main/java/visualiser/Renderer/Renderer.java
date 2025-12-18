@@ -42,6 +42,8 @@ import visualiser.Renderer.Objects.Shader;
 import visualiser.Renderer.Objects.ShadowData;
 import visualiser.Renderer.Physical.PhysicalNode;
 import visualiser.Renderer.Physical.PhysicalOrganiser;
+import visualiser.Renderer.Util.RendererStartData;
+import visualiser.Renderer.Util.RendererUpdateType;
 
 import static visualiser.Renderer.Util.LUTILVB.*;
 
@@ -74,19 +76,23 @@ public class Renderer {
 	private static int updateIndex = 0;
 
     public static <T> void start(Organiser<T> o2){
-		start(o2, new Function[0], -1, -1, new ShadowData());
+		start(o2, new Function[0], -1, RendererUpdateType.UpdateAll, new ShadowData());
 	}
 
-    public static <T> void start(Organiser<T> o2, int updateCount, int updateType){
+    public static <T> void start(Organiser<T> o2, int updateCount, RendererUpdateType updateType){
 		start(o2, new Function[0], updateCount, updateType, new ShadowData());
 	}
 
     public static <T> void start(Organiser<T> o2, Function[] fns){
-		start(o2, fns, -1, -1, new ShadowData());
+		start(o2, fns, -1, RendererUpdateType.UpdateAll, new ShadowData());
+	}
+
+	public static <T> void start(Organiser<T> o2, RendererStartData dat){
+		start(o2, dat.fns(),dat.updateCount(),dat.updateType(),dat.shadow());
 	}
 
 	@SuppressWarnings("unchecked")
-    public static <T> void start(Organiser<T> o2, Function[] fns, int updateCount, int updateType, ShadowData shadow){
+    public static <T> void start(Organiser<T> o2, Function[] fns, int updateCount, RendererUpdateType updateType, ShadowData shadow){
 		if(o2 instanceof PhysicalOrganiser){
 			o = (PhysicalOrganiser<T>)o2;
 		}else{
@@ -201,17 +207,24 @@ public class Renderer {
 
 			//double t1 = glfwGetTime();
 			if(run){
-				if(updateType==-1){
+				switch (updateType) {
+					case UpdateAll:
 					o.update((float)Math.min(deltaTime,0.05)*(ffw?30:1),glfwGetTime());
-				}else if(updateType==-2){
-					updateIndex = o.update((float)Math.min(deltaTime,0.05)*(ffw?30:1),glfwGetTime(),updateIndex, updateCount, 0.01);
-				}else{
+						break;
+					case UpdateNumber:
 					boolean wrap = o.update((float)Math.min(deltaTime,0.05)*(ffw?30:1),glfwGetTime(),updateIndex,updateIndex);
 					if(wrap){
 						updateIndex = 0;
 					}else{
 						updateIndex+=updateCount;
 					}
+						break;
+					case UpdateToTime:
+					updateIndex = o.update((float)Math.min(deltaTime,0.05)*(ffw?30:1),glfwGetTime(),updateIndex, updateCount, 0.01);
+						break;
+				
+					default:
+						break;
 				}
 			}
 
@@ -447,10 +460,11 @@ public class Renderer {
 		}
 	}
 
+	// Returns if key is down (many times per press)
 	public static boolean isKeyDown(int key){
 		return keysDown[key];
 	}
-
+	// Returns if key was pressed last frame (once per press)
 	public static boolean isKeyPressed(int key){
 		return keysPressed[key];
 	}

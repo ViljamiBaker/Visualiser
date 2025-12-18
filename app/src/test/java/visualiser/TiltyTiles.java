@@ -16,6 +16,7 @@ import visualiser.Renderer.Renderer;
 import visualiser.Renderer.Objects.Function;
 import visualiser.Renderer.Objects.RenderData;
 import visualiser.Renderer.Objects.ShadowData;
+import visualiser.Renderer.Util.RendererUpdateType;
 import visualiser.Data.BaseNode;
 import visualiser.Data.Organiser;
 import visualiser.Data.Pathfinder;
@@ -276,7 +277,7 @@ public class TiltyTiles {
         Board b = (Board)Renderer.selectedNode1.d;
         Board[] mov = b.getPossibleMoves();
         if(mov.length<4) return;
-        Renderer.selectedNode1 = Renderer.o.findNode(mov[dir]);
+        Renderer.selectedNode1 = Renderer.o.findAndAddNode(mov[dir]);
         System.out.println(Renderer.selectedNode1.d);
     }
 
@@ -314,7 +315,7 @@ public class TiltyTiles {
                 playHelper(3);
 
             if(Renderer.isKeyPressed(GLFW_KEY_KP_5)){
-                Renderer.selectedNode1 = Renderer.o.findNode(ogBoard);
+                Renderer.selectedNode1 = Renderer.o.findAndAddNode(ogBoard);
 
                 for (BaseNode n : Renderer.o.nodes) {
                     Board b = (Board)n.d;
@@ -347,6 +348,6 @@ public class TiltyTiles {
             }
 
 
-        }}, 2, -1, new ShadowData(0.15,-1,0.3));
+        }}, 2, RendererUpdateType.UpdateToTime, new ShadowData(0.15,-1,0.3));
     }
 }

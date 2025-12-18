@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import visualiser.Renderer.Renderer;
 import visualiser.Renderer.Objects.Function;
 import visualiser.Renderer.Objects.ShadowData;
+import visualiser.Renderer.Util.RendererUpdateType;
 import visualiser.Data.Organiser;
 import visualiser.ParkingPanic.Board;
 import visualiser.ParkingPanic.Board.Car;
@@ -129,6 +130,6 @@ public class ParkingPanic2 {
         o = new Organiser<>();
         openBoards.add(ogBoard);
         System.out.println(o.nodes.length);
-        Renderer.start(o, new Function[]{new Fun()}, 100, -2, new ShadowData());
+        Renderer.start(o, new Function[]{new Fun()}, 100, RendererUpdateType.UpdateToTime, new ShadowData());
     }
 }

@@ -8,7 +8,7 @@ public class Organiser<T> {
     public Organiser(){}
 
     @SuppressWarnings("unchecked")
-    protected Node<T> findNodeInt(T dat){
+    public Node<T> findNode(T dat){
         for (BaseNode n : nodes) {
             T obj = (T)n.d;
             if(dat.equals(obj)){
@@ -25,8 +25,8 @@ public class Organiser<T> {
     }
 
     // finds AND adds node if not found
-    public Node<T> findNode(T dat){
-        Node<T> n = findNodeInt(dat);
+    public Node<T> findAndAddNode(T dat){
+        Node<T> n = findNode(dat);
         if(n!=null){
             return n;
         }
@@ -71,7 +71,7 @@ public class Organiser<T> {
     }*/
 
     public BaseNode[] findAllConnections(T dat){
-        Node<T> n = findNode(dat);
+        Node<T> n = findAndAddNode(dat);
         if(n == null) return new BaseNode[0];
         //return findAllConnectionsNode(n);
         return n.connectedNodes;
@@ -121,7 +121,7 @@ public class Organiser<T> {
     }
 
     public Node<T> add(T dat){
-        Node<T> d = findNodeInt(dat);
+        Node<T> d = findNode(dat);
         if(d!=null) return d;
         d = new Node<T>(dat);
         addInt(d);
@@ -129,7 +129,7 @@ public class Organiser<T> {
     };
 
     public void addConnection(T dat, T dat2, boolean bothway){
-        Connection<T> c = new Connection<T>(findNode(dat), findNode(dat2), bothway);
+        Connection<T> c = new Connection<T>(findAndAddNode(dat), findAndAddNode(dat2), bothway);
         addConnInt(c);
     };
     public void addConnection(T dat, T dat2){

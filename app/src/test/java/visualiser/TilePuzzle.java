@@ -12,7 +12,6 @@ import visualiser.GameTester.BoardSolver;
 import visualiser.Renderer.Renderer;
 import visualiser.Renderer.Objects.Function;
 import visualiser.Renderer.Objects.ShadowData;
-import visualiser.Renderer.Physical.PhysicalNode;
 import visualiser.Renderer.Util.RendererStartData;
 import visualiser.Renderer.Util.RendererUpdateType;
 

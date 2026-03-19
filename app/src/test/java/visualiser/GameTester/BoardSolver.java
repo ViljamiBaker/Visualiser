@@ -3,8 +3,6 @@ package visualiser.GameTester;
 import java.util.ArrayList;
 
 import visualiser.Renderer.Renderer;
-import visualiser.Renderer.Objects.Function;
-import visualiser.Renderer.Objects.ShadowData;
 import visualiser.Renderer.Physical.PhysicalOrganiser;
 import visualiser.Renderer.Util.RendererStartData;
 
